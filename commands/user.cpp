@@ -1,0 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   user.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: suna <suna@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/24 14:55:41 by suna              #+#    #+#             */
+/*   Updated: 2026/03/24 14:55:42 by suna             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../commands.hpp"
+#include <iostream>
+
+void userCmd(User &userObj, std::vector<std::string> cmds, int fd)
+{
+    struct userInfo &info = userObj.getUserInfo(fd);
+
+    if (cmds.size() < 5)
+    {
+        std::string nick = userObj.getNickName(fd);
+        if (nick.empty())
+            nick = "*";
+        std::string errorMsg = ":server 461 " + nick + " USER :Not enough parameters\r\n";
+        info.writeBuffer += errorMsg;
+        return;
+    }
+    info.loginName = cmds[1];
+}
